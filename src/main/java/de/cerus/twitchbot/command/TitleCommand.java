@@ -21,7 +21,7 @@ public class TitleCommand extends Command {
             return;
         }
 
-        this.getTwitchClient().getKraken().updateTitle(System.getenv("TWITCH_OAUTH"), "realcerus", String.join(" ", args));
+        this.getTwitchClient().getKraken().updateTitle(System.getenv("TWITCH_OAUTH"), Constants.USER_ID, String.join(" ", args)).execute();
         this.getTwitchClient().getChat().sendMessage("realcerus", "Titel wurde geändert");
     }
 
