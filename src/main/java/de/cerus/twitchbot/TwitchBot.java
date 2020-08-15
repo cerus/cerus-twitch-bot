@@ -10,6 +10,7 @@ import de.cerus.twitchbot.command.CustomCommandCommand;
 import de.cerus.twitchbot.command.GameCommand;
 import de.cerus.twitchbot.command.TitleCommand;
 import de.cerus.twitchbot.command.WatchTimeCommand;
+import de.cerus.twitchbot.listener.FollowListener;
 import de.cerus.twitchbot.listener.MessageListener;
 import de.cerus.twitchbot.sql.SqliteService;
 import de.cerus.twitchbot.watchtime.WatchTimeCounter;
@@ -45,6 +46,7 @@ public class TwitchBot {
         final SimpleEventHandler eventHandler = eventManager.getEventHandler(SimpleEventHandler.class);
 
         new MessageListener(eventHandler, commandRegistry);
+        new FollowListener(eventHandler);
 
         this.watchTimeCounter.start(this.twitchClient);
 
