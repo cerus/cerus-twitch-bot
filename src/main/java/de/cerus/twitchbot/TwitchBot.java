@@ -33,7 +33,7 @@ public class TwitchBot {
 
         final CommandRegistry commandRegistry = new CommandRegistry();
         commandRegistry.register(new WatchTimeCommand(this.twitchClient, this.watchTimeCounter));
-        commandRegistry.register(new CodeCommand());
+        commandRegistry.register(new CodeCommand(this.twitchClient));
 
         final EventManager eventManager = this.twitchClient.getEventManager();
         final SimpleEventHandler eventHandler = eventManager.getEventHandler(SimpleEventHandler.class);
