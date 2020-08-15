@@ -7,6 +7,7 @@ import com.github.twitch4j.chat.TwitchChat;
 import de.cerus.twitchbot.command.CodeCommand;
 import de.cerus.twitchbot.command.CommandRegistry;
 import de.cerus.twitchbot.command.CustomCommandCommand;
+import de.cerus.twitchbot.command.TitleCommand;
 import de.cerus.twitchbot.command.WatchTimeCommand;
 import de.cerus.twitchbot.listener.MessageListener;
 import de.cerus.twitchbot.sql.SqliteService;
@@ -36,6 +37,7 @@ public class TwitchBot {
         commandRegistry.register(new WatchTimeCommand(this.twitchClient, this.watchTimeCounter));
         commandRegistry.register(new CodeCommand(this.twitchClient));
         commandRegistry.register(new CustomCommandCommand(this.twitchClient, this.sqliteService));
+        commandRegistry.register(new TitleCommand(this.twitchClient));
 
         final EventManager eventManager = this.twitchClient.getEventManager();
         final SimpleEventHandler eventHandler = eventManager.getEventHandler(SimpleEventHandler.class);
