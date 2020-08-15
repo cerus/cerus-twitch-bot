@@ -1,5 +1,7 @@
 package de.cerus.twitchbot.command.custom;
 
+import com.github.philippheuer.events4j.simple.SimpleEventHandler;
+import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import de.cerus.twitchbot.sql.SqliteService;
 import java.sql.ResultSet;
@@ -12,12 +14,25 @@ public class CustomCommandRegistry {
 
     private final Set<CustomCommand> customCommands = new HashSet<>();
 
-    public CustomCommandRegistry(final SqliteService sqliteService) {
+    private final SqliteService sqliteService;
+
+    public CustomCommandRegistry(final TwitchClient twitchClient, final SqliteService sqliteService) {
+        this.sqliteService = sqliteService;
+
         try {
             this.load(sqliteService);
         } catch (final SQLException e) {
             e.printStackTrace();
         }
+
+        twitchClient.getEventManager().getEventHandler(SimpleEventHandler.class)
+                .onEvent(ChannelMessageEvent.class, event -> {
+                    if (!event.getMessageEvent().getChannel().getName().equals("realcerus")) {
+                        return;
+                    }
+
+                    this.invoke(event);
+                });
     }
 
     private void load(final SqliteService sqliteService) throws SQLException {
@@ -26,7 +41,7 @@ public class CustomCommandRegistry {
 
         final ResultSet resultSet = sqliteService.execute("SELECT * FROM `custom_commands`");
         while (resultSet.next()) {
-            this.register(new CustomCommand(
+            this.customCommands.add(new CustomCommand(
                     resultSet.getString("name"),
                     resultSet.getString("message")
             ));
@@ -35,6 +50,26 @@ public class CustomCommandRegistry {
 
     public void register(final CustomCommand command) {
         this.customCommands.add(command);
+
+        try {
+            this.sqliteService.update("INSERT INTO `custom_commands` (name, message) VALUES (?, ?)", command.getName(), command.getMessage());
+        } catch (final SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(final String commandName) {
+        new HashSet<>(this.customCommands).stream()
+                .filter(command -> command.getName().equals(commandName))
+                .forEach(command -> {
+                    this.customCommands.remove(command);
+
+                    try {
+                        this.sqliteService.update("DELETE FROM `custom_commands` WHERE name = ?", command.getName());
+                    } catch (final SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     public void invoke(final ChannelMessageEvent event) {

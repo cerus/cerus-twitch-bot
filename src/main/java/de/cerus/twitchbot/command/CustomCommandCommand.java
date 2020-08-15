@@ -19,7 +19,7 @@ public class CustomCommandCommand extends Command {
 
     public CustomCommandCommand(final TwitchClient twitchClient, final SqliteService sqliteService) {
         super(twitchClient, "!command");
-        this.customCommandRegistry = new CustomCommandRegistry(sqliteService);
+        this.customCommandRegistry = new CustomCommandRegistry(twitchClient, sqliteService);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CustomCommandCommand extends Command {
                 return;
             }
             if (args[0].equalsIgnoreCase("remove")) {
-
+                this.handleRemoveCommand(Arrays.copyOfRange(args, 1, args.length), event);
                 return;
             }
         }
@@ -62,6 +62,17 @@ public class CustomCommandCommand extends Command {
 
         this.customCommandRegistry.register(new CustomCommand(name, message));
         this.getTwitchClient().getChat().sendMessage(event.getChannel().getName(), "Command hinzugefügt");
+    }
+
+    private void handleRemoveCommand(final String[] args, final IRCMessageEvent event) {
+        if (args.length != 1) {
+            return;
+        }
+
+        final String commandName = args[0];
+
+        this.customCommandRegistry.delete(commandName);
+        this.getTwitchClient().getChat().sendMessage(event.getChannel().getName(), "Command gelöscht");
     }
 
 }
