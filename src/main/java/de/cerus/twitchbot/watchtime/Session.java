@@ -4,7 +4,7 @@ public class Session {
 
     private final String user;
     private final String channel;
-    private final long joined;
+    private long joined;
 
     public Session(final String user, final String channel, final long joined) {
         this.user = user;
@@ -24,4 +24,8 @@ public class Session {
         return this.joined;
     }
 
+    public void setJoined(long joined) {
+        this.joined = joined;
+    }
+    
 }

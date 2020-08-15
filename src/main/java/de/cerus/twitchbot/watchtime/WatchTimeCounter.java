@@ -50,6 +50,7 @@ public class WatchTimeCounter {
             if (resultSet.next()) {
                 this.sqliteService.update("UPDATE `watchtime` SET watched = ? WHERE user = ? AND channel = ?",
                         resultSet.getLong("watched") + (System.currentTimeMillis() - session.getJoined()), user, channel);
+                session.setJoined(System.currentTimeMillis());
             } else {
                 this.sqliteService.update("INSERT INTO `watchtime` (user, channel, watched) VALUES (?, ?, ?)",
                         user, channel, System.currentTimeMillis() - session.getJoined());
