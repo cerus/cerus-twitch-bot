@@ -4,16 +4,14 @@ import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.chat.TwitchChat;
 import com.github.twitch4j.chat.events.channel.IRCMessageEvent;
 import com.github.twitch4j.common.events.domain.EventUser;
+import de.cerus.twitchbot.Constants;
 import de.cerus.twitchbot.command.custom.CustomCommand;
 import de.cerus.twitchbot.command.custom.CustomCommandRegistry;
 import de.cerus.twitchbot.sql.SqliteService;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class CustomCommandCommand extends Command {
-
-    private final List<String> whitelist = Arrays.asList(System.getenv("TWITCH_WHITELIST").split(";"));
 
     private final CustomCommandRegistry customCommandRegistry;
 
@@ -24,7 +22,7 @@ public class CustomCommandCommand extends Command {
 
     @Override
     public void invoke(final EventUser user, final String[] args, final IRCMessageEvent event) {
-        if (!this.whitelist.contains(user.getName())) {
+        if (!Constants.WHITELIST.contains(user.getName())) {
             return;
         }
 
