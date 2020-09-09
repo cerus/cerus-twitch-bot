@@ -47,7 +47,8 @@ public class CustomCommandCommand extends Command {
         chat.sendMessage(event.getChannel().getName(), "Verfügbare custom Commands: "
                 + this.customCommandRegistry.getCustomCommands().stream()
                 .map(CustomCommand::getName)
-                .collect(Collectors.joining(", ")) + " (" + this.customCommandRegistry.getCustomCommands().size() + ")");
+                .collect(Collectors.joining(", ")) + " ("
+                + this.customCommandRegistry.getCustomCommands().size() + ")");
     }
 
     public void handleAddCommand(final String[] args, final IRCMessageEvent event) {

@@ -8,6 +8,7 @@ import de.cerus.twitchbot.command.CodeCommand;
 import de.cerus.twitchbot.command.CommandRegistry;
 import de.cerus.twitchbot.command.CustomCommandCommand;
 import de.cerus.twitchbot.command.GameCommand;
+import de.cerus.twitchbot.command.HelpCommand;
 import de.cerus.twitchbot.command.TitleCommand;
 import de.cerus.twitchbot.command.WatchTimeCommand;
 import de.cerus.twitchbot.listener.FollowListener;
@@ -41,6 +42,7 @@ public class TwitchBot {
         commandRegistry.register(new CustomCommandCommand(this.twitchClient, this.sqliteService));
         commandRegistry.register(new TitleCommand(this.twitchClient));
         commandRegistry.register(new GameCommand(this.twitchClient));
+        commandRegistry.register(new HelpCommand(this.twitchClient, commandRegistry));
 
         final EventManager eventManager = this.twitchClient.getEventManager();
         final SimpleEventHandler eventHandler = eventManager.getEventHandler(SimpleEventHandler.class);

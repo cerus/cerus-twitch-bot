@@ -2,6 +2,7 @@ package de.cerus.twitchbot.command;
 
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,4 +25,7 @@ public class CommandRegistry {
                 .forEach(cmd -> cmd.invoke(event.getUser(), args, event.getMessageEvent()));
     }
 
+    public Set<Command> getCommands() {
+        return Collections.unmodifiableSet(this.commands);
+    }
 }
